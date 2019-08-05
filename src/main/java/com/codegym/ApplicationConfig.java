@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -40,6 +41,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan("com.codegym")
 @EnableJpaRepositories("com.codegym.repository")
+@EnableSpringDataWebSupport
 public class ApplicationConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -51,7 +53,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
 
 
     @Bean
-    public CustomerService customerService() {
+   public CustomerService customerService() {
         return new CustomerServiceImpl();
     }
 
@@ -60,6 +62,8 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         return new ProvinceServiceImpl();
     }
 
+
+    //cau hinh thymeleaf
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -86,6 +90,8 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         return viewResolver;
     }
 
+
+    //cau hinh entity
     @Bean
     @Qualifier(value = "entityManager")
     public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
@@ -104,6 +110,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
         return em;
     }
 
+    //cau hinh nguon lay du lieu
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

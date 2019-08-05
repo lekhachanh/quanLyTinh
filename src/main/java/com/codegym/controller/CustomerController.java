@@ -4,11 +4,16 @@ import com.codegym.model.Customer;
 import com.codegym.model.Province;
 import com.codegym.service.CustomerService;
 import com.codegym.service.ProvinceService;
-import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/customer")
@@ -25,10 +30,15 @@ public class CustomerController {
         return provinceService.findAll();
     }
 
-    @GetMapping("list")
-    public ModelAndView listCustomer(){
-        Iterable<Customer> customers = customerService.findAll();
-        ModelAndView modelAndView = new ModelAndView("/customer/list");
+    @GetMapping("/list")
+    public ModelAndView listCustomer(@RequestParam("s") Optional<String> s, Pageable pageable){
+        Page<Customer> customers;
+        if (s.isPresent()){
+            customers = customerService.findAllByFirstNameContaining(s.get(), pageable);
+        }else {
+            customers = customerService.findAll(pageable);
+        }
+        ModelAndView modelAndView = new ModelAndView ("/customer/list");
         modelAndView.addObject("customers", customers);
         return modelAndView;
     }
