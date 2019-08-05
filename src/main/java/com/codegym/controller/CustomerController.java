@@ -70,4 +70,25 @@ public class CustomerController {
         modelAndView.addObject("message", "updated successfully ");
         return modelAndView;
     }
+
+    @GetMapping("/delete/{id}")
+    public ModelAndView deleteCustomer(@PathVariable Long id){
+        Customer customer = customerService.findById(id);
+        if (customer != null) {
+            ModelAndView modelAndView = new ModelAndView("/customer/delete");
+            modelAndView.addObject("customer", customer);
+            return modelAndView;
+        }else {
+            ModelAndView modelAndView = new ModelAndView("/error-404");
+            return modelAndView;
+        }
+    }
+
+    @PostMapping("/remove")
+    public ModelAndView removeCustomer(@ModelAttribute ("customer") Customer customer){
+        customerService.remove(customer.getId());
+        ModelAndView modelAndView = new ModelAndView("/customer/delete");
+        modelAndView.addObject("message", "deleted successfully ");
+        return modelAndView;
+    }
 }
