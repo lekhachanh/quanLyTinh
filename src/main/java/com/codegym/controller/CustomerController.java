@@ -4,12 +4,10 @@ import com.codegym.model.Customer;
 import com.codegym.model.Province;
 import com.codegym.service.CustomerService;
 import com.codegym.service.ProvinceService;
+import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -48,6 +46,28 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView(("/customer/create"));
         modelAndView.addObject("customer", new Customer());
         modelAndView.addObject("message", "new customer created");
+        return modelAndView;
+    }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView showEditCustomerForm(@PathVariable Long id){
+        Customer customer = customerService.findById(id);
+        if (customer != null) {
+            ModelAndView modelAndView = new ModelAndView("/customer/edit");
+            modelAndView.addObject("customer", customer);
+            return modelAndView;
+        }else {
+            ModelAndView modelAndView = new ModelAndView("/error-404");
+            return modelAndView;
+        }
+    }
+
+    @PostMapping("/update")
+    public ModelAndView updateCustomer(@ModelAttribute ("customer") Customer customer){
+        customerService.save(customer);
+        ModelAndView modelAndView = new ModelAndView("/customer/edit");
+        modelAndView.addObject("customer", customer);
+        modelAndView.addObject("message", "updated successfully ");
         return modelAndView;
     }
 }
