@@ -62,6 +62,7 @@ public class ProvinceController {
         return modelAndView;
     }
 
+
     @GetMapping("/delete/{id}")
     public ModelAndView deleteProvinceForm(@PathVariable ("id") Long id) {
         Province province = provinceService.findById(id);

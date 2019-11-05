@@ -8,6 +8,8 @@ import com.codegym.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +33,7 @@ public class CustomerController {
     }
 
     @GetMapping("/list")
-    public ModelAndView listCustomer(@RequestParam("s") Optional<String> s, Pageable pageable){
+    public ModelAndView listCustomer(@RequestParam("s") Optional<String> s, @PageableDefault(size = 5, direction = Sort.Direction.ASC) Pageable pageable){
         Page<Customer> customers;
         if (s.isPresent()){
             customers = customerService.findAllByFirstNameContaining(s.get(), pageable);
